@@ -1,25 +1,6 @@
 {
-  "name": "practico-integrador-web-ll",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Joacc0/Practico-Integrador-Web-ll.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Joacc0/Practico-Integrador-Web-ll/issues"
-  },
-  "homepage": "https://github.com/Joacc0/Practico-Integrador-Web-ll#readme",
-  "description": "",
   "dependencies": {
-    "axios": "^1.9.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0"
   }
 }
