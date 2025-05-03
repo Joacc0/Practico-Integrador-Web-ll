@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Juego de Países</title>
-  <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Preguntas</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-    <h1>Juego de Preguntas y Respuestas</h1>
+    <div class="container">
+    <h1>Juego de Preguntas sobre Países</h1>
 
-    <div id="pregunta"></div>
+    <label for="nombre">Nombre de usuario:</label>
+    <input type="text" id="nombre" placeholder="Tu nombre" required>
+    <button id="comenzar">Comenzar juego</button>
 
-    <div id="opciones"></div>
+    <div id="juego" class="hidden">
+        <div id="pregunta"></div>
+        <div id="opciones"></div>
+        <div id="resultado"></div>
+        <button id="siguiente" disabled>Siguiente</button>
+    </div>
 
-    <button id="siguiente" disabled>Siguiente Pregunta</button>
+    <div id="final" class="hidden">
+        <h2>Juego terminado</h2>
+        <p id="puntos"></p>
+        <h3>Ranking</h3>
+        <ul id="ranking"></ul>
+        <button onclick="window.location.reload()">Jugar otra vez</button>
+    </div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
-

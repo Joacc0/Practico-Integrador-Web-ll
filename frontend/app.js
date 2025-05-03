@@ -1,35 +1,91 @@
-let preguntaActual = null;
+const API_URL = 'http://localhost:3000';
 
-async function cargarPregunta() {
-    const res = await axios.get('http://localhost:3000/api/pregunta');
-    preguntaActual = res.data;
+let usuario = '';
+let puntos = 0;
+let preguntaActual = 0;
+let preguntas = [];
 
-    document.getElementById('pregunta').innerText = preguntaActual.pregunta;
+const valoresPregunta = [3, 5, 3];
 
-    const opcionesDiv = document.getElementById('opciones');
-    opcionesDiv.innerHTML = '';
+const nombreInput = document.getElementById('nombre');
+const comenzarBtn = document.getElementById('comenzar');
+const juego = document.getElementById('juego');
+const preguntaElem = document.getElementById('pregunta');
+const opcionesElem = document.getElementById('opciones');
+const siguienteBtn = document.getElementById('siguiente');
+const finalDiv = document.getElementById('final');
+const puntosFinal = document.getElementById('puntos');
+const rankingList = document.getElementById('ranking');
 
-    preguntaActual.opciones.forEach(opcion => {
+comenzarBtn.addEventListener('click', async () => {
+    usuario = nombreInput.value.trim();
+    if (!usuario) return;
+
+    const res = await fetch(`${API_URL}/preguntas`);
+    preguntas = await res.json();
+
+    document.querySelector('label[for="nombre"]').style.display = 'none';
+    nombreInput.style.display = 'none';
+    comenzarBtn.style.display = 'none';
+    juego.classList.remove('hidden');
+
+    cargarPregunta();
+});
+
+function cargarPregunta() {
+    if (preguntaActual >= preguntas.length) return mostrarResultados();
+
+    const pregunta = preguntas[preguntaActual];
+
+    preguntaElem.innerHTML = pregunta.pregunta;
+    opcionesElem.innerHTML = '';
+
+    if (pregunta.tipo === 'bandera') {
+    const img = document.createElement('img');
+    img.src = pregunta.imagen;
+    img.alt = 'Bandera';
+    img.width = 150;
+    preguntaElem.appendChild(img);
+    }
+
+    pregunta.opciones.forEach(opcion => {
     const btn = document.createElement('button');
-    btn.innerText = opcion;
-    btn.onclick = () => verificarRespuesta(opcion);
-    opcionesDiv.appendChild(btn);
+    btn.textContent = opcion;
+    btn.classList.add('opcion');
+    btn.onclick = () => verificarRespuesta(opcion, pregunta.respuestaCorrecta);
+    opcionesElem.appendChild(btn);
     });
 
-    document.getElementById('siguiente').disabled = true;
+    siguienteBtn.disabled = true;
 }
 
-function verificarRespuesta(respuestaSeleccionada) {
-    if (respuestaSeleccionada === preguntaActual.respuestaCorrecta) {
-    alert('¡Correcto!');
-    } else {
-    alert(`¡Incorrecto! La respuesta correcta era: ${preguntaActual.respuestaCorrecta}`);
+function verificarRespuesta(respuesta, correcta) {
+    if (respuesta === correcta) {
+    puntos += valoresPregunta[preguntaActual];
     }
-    document.getElementById('siguiente').disabled = false;
+
+    preguntaActual++;
+    setTimeout(cargarPregunta, 1000);
 }
 
-document.getElementById('siguiente').addEventListener('click', cargarPregunta);
+async function mostrarResultados() {
+    juego.classList.add('hidden');
+    finalDiv.classList.remove('hidden');
+    puntosFinal.textContent = `${usuario}, tu puntaje fue de ${puntos} puntos.`;
 
-cargarPregunta();
+    await fetch(`${API_URL}/ranking`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre: usuario, puntos })
+    });
 
+    const res = await fetch(`${API_URL}/ranking`);
+    const ranking = await res.json();
 
+    rankingList.innerHTML = '';
+    ranking.forEach(j => {
+    const li = document.createElement('li');
+    li.textContent = `${j.nombre}: ${j.puntos} puntos`;
+    rankingList.appendChild(li);
+    });
+}
