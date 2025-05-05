@@ -3,89 +3,154 @@ const API_URL = 'http://localhost:3000';
 let usuario = '';
 let puntos = 0;
 let preguntaActual = 0;
-let preguntas = [];
+let correctas = 0;
+let incorrectas = 0;
+let tiempoInicio = null;
+let tiemposPorPregunta = [];
+let preguntaEnCurso = null;
+const totalPreguntas = 10;
+const valoresPregunta = [3, 5, 3]; // orden: capital, bandera, limítrofes
 
-const valoresPregunta = [3, 5, 3];
-
-const nombreInput = document.getElementById('nombre');
-const comenzarBtn = document.getElementById('comenzar');
+const formUsuario = document.getElementById('form-usuario');
 const juego = document.getElementById('juego');
 const preguntaElem = document.getElementById('pregunta');
 const opcionesElem = document.getElementById('opciones');
 const siguienteBtn = document.getElementById('siguiente');
-const finalDiv = document.getElementById('final');
-const puntosFinal = document.getElementById('puntos');
-const rankingList = document.getElementById('ranking');
+const rankingDiv = document.getElementById('ranking');
 
-comenzarBtn.addEventListener('click', async () => {
+formUsuario.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombreInput = document.getElementById('nombre');
     usuario = nombreInput.value.trim();
-    if (!usuario) return;
-
-    const res = await fetch(`${API_URL}/preguntas`);
-    preguntas = await res.json();
-
-    document.querySelector('label[for="nombre"]').style.display = 'none';
-    nombreInput.style.display = 'none';
-    comenzarBtn.style.display = 'none';
-    juego.classList.remove('hidden');
-
-    cargarPregunta();
+    if (usuario) {
+        formUsuario.style.display = 'none';
+        juego.style.display = 'block';
+        tiempoInicio = Date.now();
+        cargarPregunta();
+    }
 });
 
-function cargarPregunta() {
-    if (preguntaActual >= preguntas.length) return mostrarResultados();
-
-    const pregunta = preguntas[preguntaActual];
-
-    preguntaElem.innerHTML = pregunta.pregunta;
-    opcionesElem.innerHTML = '';
-
-    if (pregunta.tipo === 'bandera') {
-    const img = document.createElement('img');
-    img.src = pregunta.imagen;
-    img.alt = 'Bandera';
-    img.width = 150;
-    preguntaElem.appendChild(img);
+siguienteBtn.addEventListener('click', () => {
+    preguntaActual++;
+    if (preguntaActual < totalPreguntas) {
+        cargarPregunta();
+    } else {
+        mostrarResultados();
     }
-
-    pregunta.opciones.forEach(opcion => {
-    const btn = document.createElement('button');
-    btn.textContent = opcion;
-    btn.classList.add('opcion');
-    btn.onclick = () => verificarRespuesta(opcion, pregunta.respuestaCorrecta);
-    opcionesElem.appendChild(btn);
-    });
-
     siguienteBtn.disabled = true;
+});
+
+async function cargarPregunta() {
+    try {
+        const numero = (preguntaActual % 3) + 1;
+        const tipo = numero === 1 ? "capital" : numero === 2 ? "bandera" : "limites";
+        const res = await fetch(`${API_URL}/pregunta/${tipo}`);
+        preguntaEnCurso = await res.json();
+
+        // Validación defensiva
+        if (!preguntaEnCurso || !preguntaEnCurso.opciones || preguntaEnCurso.opciones.length < 2) {
+            preguntaElem.innerHTML = '❌ Error al cargar la pregunta. Intenta nuevamente.';
+            opcionesElem.innerHTML = '';
+            siguienteBtn.disabled = false;
+            return;
+        }
+
+        preguntaElem.innerHTML = preguntaEnCurso.pregunta;
+        if (preguntaEnCurso.imagen) {
+            preguntaElem.innerHTML += `<br><img src="${preguntaEnCurso.imagen}" width="100">`;
+        }
+
+        opcionesElem.innerHTML = '';
+        preguntaEnCurso.opciones.forEach(opcion => {
+            const btn = document.createElement('button');
+            btn.textContent = opcion;
+            btn.classList.add('opcion');
+            btn.onclick = () => verificarRespuesta(opcion);
+            opcionesElem.appendChild(btn);
+        });
+
+        siguienteBtn.disabled = true;
+        console.log('Pregunta cargada:', preguntaEnCurso);
+    } catch (err) {
+        console.error('Error al cargar pregunta:', err);
+        preguntaElem.innerHTML = '❌ Error al obtener la pregunta.';
+        opcionesElem.innerHTML = '';
+        siguienteBtn.disabled = false;
+    }
 }
 
-function verificarRespuesta(respuesta, correcta) {
-    if (respuesta === correcta) {
-    puntos += valoresPregunta[preguntaActual];
+function verificarRespuesta(opcionElegida) {
+    console.log('Respuesta seleccionada:', opcionElegida);
+
+    const tiempoRespuesta = Date.now() - tiempoInicio;
+    tiemposPorPregunta.push(tiempoRespuesta);
+    tiempoInicio = Date.now();
+
+    const correcta = preguntaEnCurso.respuestaCorrecta;
+    if (opcionElegida === correcta) {
+        puntos += preguntaEnCurso.puntos;
+        correctas++;
+        mostrarResultado('✅ ¡Correcto!');
+    } else {
+        incorrectas++;
+        mostrarResultado(`❌ Incorrecto. Respuesta correcta: ${correcta}`);
     }
 
-    preguntaActual++;
-    setTimeout(cargarPregunta, 1000);
+    Array.from(opcionesElem.children).forEach(btn => btn.disabled = true);
+    siguienteBtn.disabled = false;
+}
+
+function mostrarResultado(mensaje) {
+    const resultadoDiv = document.createElement('div');
+    resultadoDiv.innerHTML = `<p>${mensaje}</p>`;
+    opcionesElem.appendChild(resultadoDiv);
 }
 
 async function mostrarResultados() {
-    juego.classList.add('hidden');
-    finalDiv.classList.remove('hidden');
-    puntosFinal.textContent = `${usuario}, tu puntaje fue de ${puntos} puntos.`;
+    const tiempoTotal = tiemposPorPregunta.reduce((a, b) => a + b, 0);
+    const promedio = (tiempoTotal / tiemposPorPregunta.length / 1000).toFixed(2);
 
-    await fetch(`${API_URL}/ranking`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nombre: usuario, puntos })
+    preguntaElem.innerHTML = `
+    <h2>Juego terminado, ${usuario}!</h2>
+    <p>Puntaje: ${puntos}</p>
+    <p>Correctas: ${correctas}</p>
+    <p>Incorrectas: ${incorrectas}</p>
+    <p>Tiempo total: ${(tiempoTotal / 1000).toFixed(2)}s</p>
+    <p>Tiempo promedio por pregunta: ${promedio}s</p>
+  `;
+    opcionesElem.innerHTML = '';
+    siguienteBtn.style.display = 'none';
+
+    try {
+        await fetch(`${API_URL}/ranking`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre: usuario,
+                puntos,
+                correctas,
+                tiempoTotal: Math.floor(tiempoTotal)
+            })
+        });
+
+        const res = await fetch(`${API_URL}/ranking`);
+        const ranking = await res.json();
+
+        mostrarRanking(ranking);
+    } catch (err) {
+        console.error('Error mostrando ranking:', err);
+    }
+}
+
+function mostrarRanking(ranking) {
+    rankingDiv.innerHTML = '<h3>Top 20 partidas</h3>';
+    const lista = document.createElement('ol');
+
+    ranking.slice(0, 20).forEach(jugador => {
+        const item = document.createElement('li');
+        item.textContent = `${jugador.nombre} - ${jugador.puntos} pts, ${jugador.correctas} correctas, ${(jugador.tiempoTotal / 1000).toFixed(2)}s`;
+        lista.appendChild(item);
     });
 
-    const res = await fetch(`${API_URL}/ranking`);
-    const ranking = await res.json();
-
-    rankingList.innerHTML = '';
-    ranking.forEach(j => {
-    const li = document.createElement('li');
-    li.textContent = `${j.nombre}: ${j.puntos} puntos`;
-    rankingList.appendChild(li);
-    });
+    rankingDiv.appendChild(lista);
 }

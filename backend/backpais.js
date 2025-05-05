@@ -1,47 +1,59 @@
 const axios = require('axios');
 
-async function obtenerPreguntas() {
+async function obtenerPregunta(tipo) {
     const res = await axios.get('https://restcountries.com/v3.1/all');
-    const paises = res.data;
+    const paises = res.data.filter(p => p.name?.common && p.flags?.png && p.capital && p.capital.length);
+    let pais;
 
-    const preguntas = [];
+    // Intenta encontrar un país válido
+    for (let i = 0; i < 10; i++) {
+        const candidato = paises[Math.floor(Math.random() * paises.length)];
+        if (
+            (tipo === 'capital' && candidato.capital && candidato.capital.length) ||
+            (tipo === 'bandera') ||
+            (tipo === 'limites' && candidato.name?.common)
+        ) {
+            pais = candidato;
+            break;
+        }
+    }
 
-    // Pregunta 1: Capital → País (3 puntos)
-    const pais1 = paises[Math.floor(Math.random() * paises.length)];
-    preguntas.push({
-    tipo: 'capital',
-    pregunta: `¿A qué país pertenece la capital: ${pais1.capital?.[0] || 'desconocida'}?`,
-    opciones: generarOpciones(paises, pais1.name.common),
-    respuestaCorrecta: pais1.name.common
-    });
+    if (!pais) throw new Error('No se encontró un país válido');
 
-    // Pregunta 2: Bandera → País (5 puntos)
-    const pais2 = paises[Math.floor(Math.random() * paises.length)];
-    preguntas.push({
-    tipo: 'bandera',
-    pregunta: `¿A qué país pertenece esta bandera?`,
-    imagen: pais2.flags?.png,
-    opciones: generarOpciones(paises, pais2.name.common),
-    respuestaCorrecta: pais2.name.common
-    });
+    switch (tipo) {
+        case 'capital':
+            return {
+                pregunta: `¿A qué país pertenece la capital: ${pais.capital[0]}?`,
+                opciones: generarOpciones(paises, pais.name.common),
+                respuestaCorrecta: pais.name.common,
+                puntos: 3
+            };
 
-  // Pregunta 3: País → Nº de fronteras (3 puntos)
-  const pais3 = paises[Math.floor(Math.random() * paises.length)];
-    preguntas.push({
-    tipo: 'limites',
-    pregunta: `¿Cuántos países limítrofes tiene ${pais3.name.common}?`,
-    opciones: generarOpcionesNumero(paises, pais3.borders?.length || 0),
-    respuestaCorrecta: (pais3.borders?.length || 0).toString()
-    });
+        case 'bandera':
+            return {
+                pregunta: `¿A qué país pertenece esta bandera?`,
+                imagen: pais.flags.png,
+                opciones: generarOpciones(paises, pais.name.common),
+                respuestaCorrecta: pais.name.common,
+                puntos: 5
+            };
 
-    return preguntas;
+        case 'limites':
+            const cantidad = pais.borders?.length || 0;
+            return {
+                pregunta: `¿Cuántos países limítrofes tiene ${pais.name.common}?`,
+                opciones: generarOpcionesNumero(paises, cantidad),
+                respuestaCorrecta: cantidad.toString(),
+                puntos: 3
+            };
+    }
 }
 
 function generarOpciones(paises, correcta) {
     const opciones = new Set([correcta]);
     while (opciones.size < 4) {
-    const aleatorio = paises[Math.floor(Math.random() * paises.length)].name.common;
-    opciones.add(aleatorio);
+        const aleatorio = paises[Math.floor(Math.random() * paises.length)].name.common;
+        opciones.add(aleatorio);
     }
     return [...opciones].sort(() => Math.random() - 0.5);
 }
@@ -49,10 +61,10 @@ function generarOpciones(paises, correcta) {
 function generarOpcionesNumero(paises, correcto) {
     const opciones = new Set([correcto]);
     while (opciones.size < 4) {
-    const aleatorio = Math.floor(Math.random() * 15);
-    opciones.add(aleatorio);
+        const aleatorio = Math.floor(Math.random() * 15);
+        opciones.add(aleatorio);
     }
     return [...opciones].sort(() => Math.random() - 0.5).map(String);
 }
 
-module.exports = { obtenerPreguntas };
+module.exports = { obtenerPregunta };

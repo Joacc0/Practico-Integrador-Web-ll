@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Juego de Preguntas</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilos.css" />
 </head>
+
 <body>
     <div class="container">
-    <h1>Juego de Preguntas sobre Países</h1>
+        <h1>Juego de Preguntas sobre Países</h1>
 
-    <label for="nombre">Nombre de usuario:</label>
-    <input type="text" id="nombre" placeholder="Tu nombre" required>
-    <button id="comenzar">Comenzar juego</button>
+        <form id="form-usuario">
+            <label for="nombre">Nombre de usuario:</label>
+            <input type="text" id="nombre" placeholder="Tu nombre" required />
+            <button type="submit">Comenzar juego</button>
+        </form>
 
-    <div id="juego" class="hidden">
-        <div id="pregunta"></div>
-        <div id="opciones"></div>
-        <div id="resultado"></div>
-        <button id="siguiente" disabled>Siguiente</button>
-    </div>
+        <div id="juego" style="display: none">
+            <div id="pregunta"></div>
+            <div id="opciones"></div>
+            <button id="siguiente" disabled>Siguiente</button>
+        </div>
 
-    <div id="final" class="hidden">
-        <h2>Juego terminado</h2>
-        <p id="puntos"></p>
-        <h3>Ranking</h3>
-        <ul id="ranking"></ul>
-        <button onclick="window.location.reload()">Jugar otra vez</button>
-    </div>
+        <div id="ranking"></div>
     </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>
