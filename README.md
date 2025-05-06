@@ -12,5 +12,5 @@ Este es un práctico integrador web desarrollado como proyecto final de Web II. 
 - Diseño responsivo con interfaz intuitiva.
 - Backend separado con API REST y persistencia en archivos JSON.
 
-## 🧩 Estructura del proyecto
+
 
