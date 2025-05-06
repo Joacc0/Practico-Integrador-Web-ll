@@ -11,14 +11,14 @@ app.use(cors());
 app.use(express.json());
 
 // Servir archivos estáticos desde el frontend
-app.use(express.static(path.join(__dirname, "./frontend")));
+app.use(express.static(path.join(__dirname, "/frontend")));
 
 // Rutas del backend
 app.use("/", rutas);
 
 // Ruta para la SPA
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "./frontend/index.html"));
+    res.sendFile(path.join(__dirname, "/frontend/index.html"));
 });
 
 // Iniciar el servidor
