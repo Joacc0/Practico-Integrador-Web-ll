@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const rutas = require("./rutas");
+const rutas = require("../backend/rutas");
 
 const app = express();
 const PORT = 3000;
