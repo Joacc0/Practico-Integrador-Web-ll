@@ -135,7 +135,6 @@ async function mostrarResultados() {
 
         const res = await fetch(`${API_URL}/ranking`);
         const ranking = await res.json();
-
         mostrarRanking(ranking);
     } catch (err) {
         console.error('Error mostrando ranking:', err);
