@@ -137,3 +137,16 @@ img {
 .fade.show {
     opacity: 1;
 }
+
+/* ====== EN CASO DE USUARIO REPETIDO ====== */
+
+.input-error {
+    border: 2px solid red;
+    background-color: #ffe5e5;
+}
+
+.mensaje-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}

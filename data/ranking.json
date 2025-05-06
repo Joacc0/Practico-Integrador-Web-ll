@@ -1,13 +1,13 @@
 [
   {
-    "nombre": "Joacco",
+    "nombre": "Joaco",
     "puntos": 25,
     "correctas": 7,
     "tiempoTotal": 53405,
     "fecha": "2025-05-06T03:33:34.716Z"
   },
   {
-    "nombre": "Joaco",
+    "nombre": "Maximiliano",
     "puntos": 11,
     "correctas": 3,
     "tiempoTotal": 50099,
@@ -33,5 +33,124 @@
     "correctas": 4,
     "tiempoTotal": 70362,
     "fecha": "2025-05-06T04:04:45.047Z"
+  },
+  {
+    "nombre": "Marcos",
+    "puntos": 28,
+    "correctas": 8,
+    "tiempoTotal": 51994,
+    "fecha": "2025-05-06T04:31:48.211Z"
+  },
+  {
+    "nombre": "Lucas",
+    "puntos": 20,
+    "correctas": 5,
+    "tiempoTotal": 60000,
+    "fecha": "2025-05-06T04:35:12.123Z"
+  },
+  {
+    "nombre": "Nico",
+    "puntos": 22,
+    "correctas": 6,
+    "tiempoTotal": 55000,
+    "fecha": "2025-05-06T04:40:45.123Z"
+  },
+  {
+    "nombre": "Pablo",
+    "puntos": 18,
+    "correctas": 5,
+    "tiempoTotal": 58000,
+    "fecha": "2025-05-06T04:45:12.123Z"
+  },
+  {
+    "nombre": "Santiago",
+    "puntos": 24,
+    "correctas": 7,
+    "tiempoTotal": 53000,
+    "fecha": "2025-05-06T04:50:45.123Z"
+  },
+  {
+    "nombre": "Martín",
+    "puntos": 26,
+    "correctas": 8,
+    "tiempoTotal": 51000,
+    "fecha": "2025-05-06T04:55:12.123Z"
+  },
+  {
+    "nombre": "Juan",
+    "puntos": 21,
+    "correctas": 6,
+    "tiempoTotal": 54000,
+    "fecha": "2025-05-06T05:00:45.123Z"
+  },
+  {
+    "nombre": "Diego",
+    "puntos": 23,
+    "correctas": 7,
+    "tiempoTotal": 52000,
+    "fecha": "2025-05-06T05:05:12.123Z"
+  },
+  {
+    "nombre": "Gonzalo",
+    "puntos": 17,
+    "correctas": 5,
+    "tiempoTotal": 59000,
+    "fecha": "2025-05-06T05:10:45.123Z"
+  },
+  {
+    "nombre": "Ezequiel",
+    "puntos": 15,
+    "correctas": 4,
+    "tiempoTotal": 60000,
+    "fecha": "2025-05-06T05:15:12.123Z"
+  },
+  {
+    "nombre": "Nicolás",
+    "puntos": 12,
+    "correctas": 3,
+    "tiempoTotal": 61000,
+    "fecha": "2025-05-06T05:20:45.123Z"
+  },
+  {
+    "nombre": "Zahira",
+    "puntos": 13,
+    "correctas": 4,
+    "tiempoTotal": 62000,
+    "fecha": "2025-05-06T05:25:12.123Z"
+  },
+  {
+    "nombre": "Susana",
+    "puntos": 10,
+    "correctas": 2,
+    "tiempoTotal": 63000,
+    "fecha": "2025-05-06T05:30:45.123Z"
+  },
+  {
+    "nombre": "Matías",
+    "puntos": 9,
+    "correctas": 2,
+    "tiempoTotal": 64000,
+    "fecha": "2025-05-06T05:35:12.123Z"
+  },
+  {
+    "nombre": "Javier",
+    "puntos": 8,
+    "correctas": 1,
+    "tiempoTotal": 65000,
+    "fecha": "2025-05-06T05:40:45.123Z"
+  },
+  {
+    "nombre": "Valentina",
+    "puntos": 7,
+    "correctas": 1,
+    "tiempoTotal": 66000,
+    "fecha": "2025-05-06T05:45:12.123Z"
+  },
+  {
+    "nombre": "Ramiro",
+    "puntos": 6,
+    "correctas": 1,
+    "tiempoTotal": 67000,
+    "fecha": "2025-05-06T05:50:45.123Z"
   }
 ]
