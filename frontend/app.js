@@ -42,40 +42,61 @@ siguienteBtn.addEventListener('click', () => {
 
 async function cargarPregunta() {
     try {
-        const numero = (preguntaActual % 3) + 1;
-        const tipo = numero === 1 ? "capital" : numero === 2 ? "bandera" : "limites";
-        const res = await fetch(`${API_URL}/pregunta/${tipo}`);
-        preguntaEnCurso = await res.json();
+        // Oculta con animación
+        preguntaElem.classList.remove("show");
+        opcionesElem.classList.remove("show");
 
-        // Validación defensiva
-        if (!preguntaEnCurso || !preguntaEnCurso.opciones || preguntaEnCurso.opciones.length < 2) {
-            preguntaElem.innerHTML = '❌ Error al cargar la pregunta. Intenta nuevamente.';
+        // Espera 300 ms antes de cargar nueva pregunta
+        setTimeout(async () => {
+            const numero = (preguntaActual % 3) + 1;
+            const tipo = numero === 1 ? "capital" : numero === 2 ? "bandera" : "limites";
+            const res = await fetch(`${API_URL}/pregunta/${tipo}`);
+            preguntaEnCurso = await res.json();
+
+            // Validación defensiva
+            if (!preguntaEnCurso || !preguntaEnCurso.opciones || preguntaEnCurso.opciones.length < 2) {
+                preguntaElem.innerHTML = '❌ Error al cargar la pregunta. Intenta nuevamente.';
+                opcionesElem.innerHTML = '';
+                siguienteBtn.disabled = false;
+
+                // Mostrar nuevamente con animación
+                preguntaElem.classList.add("show");
+                opcionesElem.classList.add("show");
+                return;
+            }
+
+            preguntaElem.innerHTML = preguntaEnCurso.pregunta;
+
+            // Si tiene imagen, la muestra
+            if (preguntaEnCurso.imagen) {
+                preguntaElem.innerHTML += `<br><img src="${preguntaEnCurso.imagen}" width="100">`;
+            }
+
             opcionesElem.innerHTML = '';
-            siguienteBtn.disabled = false;
-            return;
-        }
+            preguntaEnCurso.opciones.forEach(opcion => {
+                const btn = document.createElement('button');
+                btn.textContent = opcion;
+                btn.classList.add('opcion');
+                btn.onclick = () => verificarRespuesta(opcion);
+                opcionesElem.appendChild(btn);
+            });
 
-        preguntaElem.innerHTML = preguntaEnCurso.pregunta;
-        if (preguntaEnCurso.imagen) {
-            preguntaElem.innerHTML += `<br><img src="${preguntaEnCurso.imagen}" width="100">`;
-        }
+            siguienteBtn.disabled = true;
+            console.log('Pregunta cargada:', preguntaEnCurso);
 
-        opcionesElem.innerHTML = '';
-        preguntaEnCurso.opciones.forEach(opcion => {
-            const btn = document.createElement('button');
-            btn.textContent = opcion;
-            btn.classList.add('opcion');
-            btn.onclick = () => verificarRespuesta(opcion);
-            opcionesElem.appendChild(btn);
-        });
-
-        siguienteBtn.disabled = true;
-        console.log('Pregunta cargada:', preguntaEnCurso);
+            // Muestra con animación
+            preguntaElem.classList.add("show");
+            opcionesElem.classList.add("show");
+        }, 300); // Tiempo de fade out
     } catch (err) {
         console.error('Error al cargar pregunta:', err);
         preguntaElem.innerHTML = '❌ Error al obtener la pregunta.';
         opcionesElem.innerHTML = '';
         siguienteBtn.disabled = false;
+
+        // Muestra con animación
+        preguntaElem.classList.add("show");
+        opcionesElem.classList.add("show");
     }
 }
 

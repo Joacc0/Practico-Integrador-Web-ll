@@ -12,5 +12,26 @@
     "correctas": 3,
     "tiempoTotal": 50099,
     "fecha": "2025-05-06T03:35:15.343Z"
+  },
+  {
+    "nombre": "Facundo",
+    "puntos": 14,
+    "correctas": 4,
+    "tiempoTotal": 59401,
+    "fecha": "2025-05-06T03:50:07.537Z"
+  },
+  {
+    "nombre": "Agustin",
+    "puntos": 19,
+    "correctas": 5,
+    "tiempoTotal": 52158,
+    "fecha": "2025-05-06T03:55:53.664Z"
+  },
+  {
+    "nombre": "Augusto",
+    "puntos": 16,
+    "correctas": 4,
+    "tiempoTotal": 70362,
+    "fecha": "2025-05-06T04:04:45.047Z"
   }
 ]
