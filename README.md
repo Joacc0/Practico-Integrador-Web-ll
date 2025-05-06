@@ -13,4 +13,25 @@ Este es un práctico integrador web desarrollado como proyecto final de Web II. 
 - Backend separado con API REST y persistencia en archivos JSON.
 
 
+## 🔧 Tecnologías utilizadas
+
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Node.js + Express
+- **API externa**: [REST Countries](https://restcountries.com/)
+
+## 🖥️ Cómo ejecutar el proyecto localmente
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Joacc0/Practico-Integrador-Web-ll.git
+   cd Practico-Integrador-Web-ll
+
+2. Instalar las dependencias:
+npm install
+
+3. Inicia el servidor:
+npm start
+
+4. Abre el archivo con la extensión "Live Server" en VSCODE 
+
 
