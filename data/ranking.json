@@ -152,5 +152,12 @@
     "correctas": 1,
     "tiempoTotal": 67000,
     "fecha": "2025-05-06T05:50:45.123Z"
+  },
+  {
+    "nombre": "Joacco",
+    "puntos": 14,
+    "correctas": 4,
+    "tiempoTotal": 58486,
+    "fecha": "2025-05-06T21:56:56.905Z"
   }
 ]

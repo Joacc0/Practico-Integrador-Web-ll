@@ -1,5 +1,3 @@
-const API_URL = 'http://localhost:3000';
-
 let usuario = '';
 let puntos = 0;
 let preguntaActual = 0;
@@ -37,7 +35,7 @@ formUsuario.addEventListener('submit', async (e) => {
     }
 
     try {
-        const res = await fetch(`${API_URL}/ranking`);
+        const res = await fetch('/ranking');
         const ranking = await res.json();
 
         const yaExiste = ranking.some(j => j.nombre.toLowerCase() === nombreIngresado.toLowerCase());
@@ -81,7 +79,7 @@ async function cargarPregunta() {
         setTimeout(async () => {
             const numero = (preguntaActual % 3) + 1;
             const tipo = numero === 1 ? "capital" : numero === 2 ? "bandera" : "limites";
-            const res = await fetch(`${API_URL}/pregunta/${tipo}`);
+            const res = await fetch(`/pregunta/${tipo}`);
             preguntaEnCurso = await res.json();
 
             if (!preguntaEnCurso || !preguntaEnCurso.opciones || preguntaEnCurso.opciones.length < 2) {
@@ -167,7 +165,7 @@ async function mostrarResultados() {
     siguienteBtn.style.display = 'none';
 
     try {
-        await fetch(`${API_URL}/ranking`, {
+        await fetch('/ranking', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -178,7 +176,7 @@ async function mostrarResultados() {
             })
         });
 
-        const res = await fetch(`${API_URL}/ranking`);
+        const res = await fetch('/ranking');
         const ranking = await res.json();
         mostrarRanking(ranking);
     } catch (err) {
